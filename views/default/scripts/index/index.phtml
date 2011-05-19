@@ -1,0 +1,21 @@
+<h1><?=$this->translate('ddl_headline')?></h1>
+<?php if(count($this->servers)): ?>
+<?php foreach($this->servers as $server): ?>
+<h2><?=$server->getLabel()?></h2>
+<?php $cycle = $this->cycle(array('specialOne', 'specialTwo')); ?>
+<table>
+    <tr>
+        <th><?=$this->translate('ddl_table_filename')?></th>
+        <th><?=$this->translate('ddl_table_link')?></th>
+    </tr>
+    <?php foreach($server->getGroups() as $group): ?>
+    <tr class="<?=$cycle->next()?>"><td colspan="2"><strong><?=$this->groups[$group]?></strong></td></tr>
+        <?php foreach($server->getFiles($group) as $uri): ?>
+            <tr class="<?=$cycle->next()?>"><td><?=$server->getFilename($uri)?></td><td><a href="<?=$server->getLink($uri)?>" title="<?=$this->translate('ddl_download')?>"><?=$this->translate('ddl_download')?></a></td></tr>
+        <?php endforeach; ?>
+    <?php endforeach; ?>
+</table>
+<?php endforeach; ?>
+<?php else: ?>
+<?=$this->translate('ddl_no_servers')?>
+<?php endif; ?>

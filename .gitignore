@@ -1,0 +1,3 @@
+# Ignore the configs
+/data/*
+/configs/*.ini
