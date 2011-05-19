@@ -43,3 +43,42 @@ Example:
 
 ddl.groups.avi.label = "AVI Releases"
 ddl.groups.mkv.label = "MKV Releases"
+
+= Configuration of nginx
+
+server {
+
+    listen   80; ## listen for ipv4;
+
+    server_name  files.example.com;
+    access_log  /var/log/nginx/files.example.com-access.log;
+
+    location / {
+       root /my/path/to/the/files;
+       ## This must match the URI part related to the MD5 hash and expiration time.
+       secure_link $arg_st,$arg_e; # this must match the URI part related
+
+        ## This is how the MD5 hash is built from a secret token, an URI and an
+        ## expiration time.
+        secure_link_md5 segredo$uri$arg_e$remote_addr; # 'segredo' is the secret token
+                                                       # '$remote_addr' binds the link
+                                                       # to one user only
+
+
+        ## If the hash is incorrect then $secure_link is a null string.
+        if ($secure_link = "") {
+            return 403; # 403 means Forbidden
+        }
+
+        ## The current local time is greater than the specified expiration time.
+        if ($secure_link = "0") {
+            return 403; # 403 means Forbidden
+        }
+
+        ## If everything is ok $secure_link is 1.
+        ## This needs to be here otherwise you'll get a 404.
+        rewrite ^/(.*)$ /$1 break;
+     }
+}
+
+
