@@ -1,1 +1,45 @@
-The repository was initialized. Source code will follow soon.
+= Usage and Examples
+
+Possible placeholders for the url template are {PATH}, {HASH} and {TIMESTAMP}
+Possible placeholders for the secret are {REMOTE_ADDR}, {PATH} and {TIMESTAMP}
+
+{HASH} is the hash generated of the secure link module
+{PATH} is the requested URI
+{TIMESTAMP} is the timestamp until the link is valid
+{REMOTE_ADDR} is the ip of the user for whom the link was generated
+
+ddl.servers.x.urlTemplate The template for generating the url
+ddl.servers.x.secret The template to generate the hash from (see: secure_link_md5)
+ddl.servers.x.timeout Is the time the link is valid in seconds. 1800 seconds is a half hour.
+ddl.servers.x.label Is a label for the server to be shown in the listing
+
+Example:
+
+ddl.servers.example.urlTemplate = "http://example.com[PATH}?st={HASH}&t={TIMESTAMP}"
+ddl.servers.example.secret = "secdo{PATH}{TIMESTAMP}{REMOTE_ADDR}"
+ddl.servers.example.timeout = 1800
+ddl.servers.example.label = "Example server"
+
+Now the filelist is an ini file in the module's data directory named x.ini where
+x is the server's identifier and containes a section [files] and the content should
+look like this:
+
+ddl.files.x.group1[] = "/some/file.avi"
+ddl.files.x.group2[] = "/other/file.avi"
+ddl.files.x.group1[] = "/some/file.mkv"
+
+Example:
+
+ddl.files.example.avi[] = "/some/file.avi"
+ddl.files.example.avi[] = "/other/file.avi"
+ddl.files.example.mkv[] = "/some/file.mkv"
+
+You may add group labels in the [settings] section of the module.ini like this:
+
+ddl.groups.group1.label = "1st Group"
+ddl.groups.group2.label = "2nd Group"
+
+Example:
+
+ddl.groups.avi.label = "AVI Releases"
+ddl.groups.mkv.label = "MKV Releases"
